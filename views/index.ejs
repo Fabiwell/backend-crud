@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/include/css/stylesheet.css">
+    <title>Home</title>
+</head>
+
+
+<body id="body-home">
+    <div id="nav-bar">
+        <img src="/resources/menu.svg" alt="menu-button" id="menu-button" onclick="movemenu()">
+        <div class="circle" id="circle1"></div>
+        <div class="circle" id="circle2"></div>
+        <div class="circle" id="circle3"></div>
+        <div class="circle" id="circle4"></div>
+        <div class="circle" id="circle5"></div>
+    </div>
+    <div id="container">
+        <div id="side-menu">
+            <%if(!locals.loggedin){%>
+                <div class="button" onclick="togglemodal('login-modal')">
+                    <span>Login</span>
+                </div>
+                <div class="button">
+                    <span>Register</span>
+                </div>
+            <%}%>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+
+
+<div id="login-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+</div>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="/include/js/function-home.js"></script>
+<script></script>
