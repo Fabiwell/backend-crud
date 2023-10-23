@@ -71,7 +71,6 @@ $sidecolor: #502C2C;
 
     }
 
-  }
 
   #content {
     background-color: $backcolor;
@@ -83,12 +82,21 @@ $sidecolor: #502C2C;
     box-shadow: 0 4px 4px 0 rgba(black, 0.15) inset;
   }
 
-.circle {
-  border-radius: 50%;
-  position: absolute;
-  border: solid 1px white;
-  width: 20%;
-  height: 50%;
-  pointer-events: none;
-  z-index: 0; /* Set z-index for the circles */
+
+  #prompt-login{
+
+    width: 50%;
+    margin: auto;
+    
+    #switch-login{
+      
+      &:hover{
+        cursor: pointer;
+        color: blue;
+      }
+
+    }
+
+  }
+
 }

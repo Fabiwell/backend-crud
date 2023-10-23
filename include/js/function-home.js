@@ -1,6 +1,8 @@
 
 //define variables
 
+let noAccount = true
+
 const menu = document.getElementById("side-menu")
 const content = document.getElementById("content")
 
@@ -14,23 +16,12 @@ var togglemenu = gsap.timeline({yoyo: true, defaults:{ease:'power1.out' }})
 
 function movemenu() {
 
-    // .to('.one .block', {scaleX:0, transformOrigin:'left center'},0)
-    // .to('.two .block', {scaleX:0, transformOrigin:'right center'},0)
     if (togglemenu.reversed()) {
         togglemenu.play();
     } else {
         togglemenu.reverse();
     }
 
-
-
-    // gsap.to(menu, {
-    //     x: -menu.clientWidth
-    // })
-    // gsap.to(content, {
-    //     x: -menu.clientWidth,
-    //     width: contentchange
-    // })
 }
 
 function animateCircles(){
@@ -51,14 +42,47 @@ function togglemodal(modal){
 
     const thisModal = document.getElementById(modal)
 
-    var toggleModalcontent = gsap.timeline({yoyo: true, defaults:{ease:'power1.out' }})
+    var toggleModalcontent = gsap.timeline({yoyo: true, opacity: 1, visibility:"hidden", defaults:{ease: Power1.easeInOut }})
     .to(".modal-content", {width: '80%', borderRadius: '100px'})
 
-    if (thisModal.style.display = "none"){
-        thisModal.style.display = "block";
-        toggleModalcontent.play();
-    }else{
+    if (thisModal.style.display == "block"){
+
+        toggleModalcontent.play().reverse;
         thisModal.style.display = "none";
-        toggleModalcontent.play().reverse
+
+    }else{
+
+        toggleModalcontent.play()
+        thisModal.style.display = "block";
+
+    }
+}
+
+function switchmodalcontent(){
+
+    const title = document.getElementById("modal-title")
+    const form = document.getElementById("modal-form")
+    const fullName = document.getElementById("fullname")
+    const accountCheck = document.getElementById("account-check")
+    const switchLogin = document.getElementById("switch-login")
+
+    if(noAccount){
+
+        title.textContent = "Login";
+        document.modalForm.action = "/login"
+        fullName.style.display = "none";
+        accountCheck.textContent = "dont have an account?"
+        switchLogin.textContent = "Sign Up"
+        noAccount = false
+        
+    }else{
+
+        title.textContent = "Register";
+        document.modalForm.action = "/register"
+        fullName.style.display = "inline";
+        accountCheck.textContent = "already have an account?"
+        switchLogin.textContent = "Sign In"
+        noAccount = true
+
     }
 }

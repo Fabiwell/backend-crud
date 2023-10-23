@@ -57,8 +57,7 @@
   background-color: #502C2C;
   z-index: 2; /* Set z-index for the side-menu higher than the circles */
 }
-
-#content {
+#body-home #content {
   background-color: #573232;
   width: 80%;
   right: 0;
@@ -67,15 +66,13 @@
   border-radius: 50px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15) inset;
 }
-
-.circle {
-  border-radius: 50%;
-  position: absolute;
-  border: solid 1px white;
-  width: 20%;
-  height: 50%;
-  pointer-events: none;
-  z-index: 0; /* Set z-index for the circles */
+#body-home #prompt-login {
+  width: 50%;
+  margin: auto;
+}
+#body-home #prompt-login #switch-login:hover {
+  cursor: pointer;
+  color: blue;
 }
 
 .circle {
@@ -92,6 +89,7 @@
   margin-top: 5px;
   margin-left: 3%;
   width: 95%;
+  height: 25px;
   text-align: center;
   background-color: #573232;
   box-shadow: 0 4px 4px 0 rgba(67, 39, 39, 0.75);
@@ -120,11 +118,30 @@
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #573232;
+  text-align: center;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px #432727;
+  color: whitesmoke;
   width: 0; /* Could be more or less, depending on screen size */
+}
+
+form {
+  align-content: center;
+}
+form input {
+  background-color: #573232;
+  border-radius: 4px;
+  color: whitesmoke;
+  margin: 10px;
+  width: 50%;
+}
+form button {
+  background-color: #573232;
+  margin-top: 10px;
+  border-radius: 4px;
+  color: whitesmoke;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

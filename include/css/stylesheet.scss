@@ -5,6 +5,7 @@ $sidecolor: #502C2C;
 
 
 //style classes
+
 .circle {
   border-radius: 50%;
   position: absolute;
@@ -19,6 +20,7 @@ $sidecolor: #502C2C;
   margin-top: 5px;
   margin-left: 3%;
   width: 95%;
+  height: 25px;
   text-align: center;
   background-color: $backcolor;
   box-shadow: 0 4px 4px 0 rgba($navcolor, 0.75);
@@ -49,9 +51,34 @@ $sidecolor: #502C2C;
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: $backcolor;
+  text-align: center;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px $navcolor;
+  color: whitesmoke;
   width: 0; /* Could be more or less, depending on screen size */
+}
+
+
+
+form{
+
+  align-content: center;
+
+  input{
+    background-color: $backcolor;
+    border-radius: 4px;
+    color: whitesmoke;
+    margin: 10px;
+    width: 50%;
+  }
+
+  button{
+    background-color: $backcolor;
+    margin-top: 10px;
+    border-radius: 4px;
+    color: whitesmoke;
+  }
+
 }
