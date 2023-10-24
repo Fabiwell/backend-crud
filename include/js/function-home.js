@@ -65,6 +65,7 @@ function switchmodalcontent(){
     const fullName = document.getElementById("fullname")
     const accountCheck = document.getElementById("account-check")
     const switchLogin = document.getElementById("switch-login")
+    const submit = document.getElementById("modalformsubmit")
 
     if(noAccount){
 
@@ -73,6 +74,7 @@ function switchmodalcontent(){
         fullName.style.display = "none";
         accountCheck.textContent = "dont have an account?"
         switchLogin.textContent = "Sign Up"
+        submit.textContent = "Sign In"
         noAccount = false
         
     }else{
@@ -82,6 +84,7 @@ function switchmodalcontent(){
         fullName.style.display = "inline";
         accountCheck.textContent = "already have an account?"
         switchLogin.textContent = "Sign In"
+        submit.textContent = "Sign Up"
         noAccount = true
 
     }

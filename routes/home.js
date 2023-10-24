@@ -1,4 +1,5 @@
 const express = require('express')
+const { register } = require('../classes/register')
 const router = express.Router()
 const https = require('https')
 
@@ -16,9 +17,9 @@ router.route('/register')
     const password = data.password
 
     try {
-        await register(email, name , password)
+        await register(email, name, password)
         res.render("index", {
-            login: true
+            registered: true
         })
 
     } catch (error) {
