@@ -19,7 +19,7 @@
     </div>
     <div id="container">
         <div id="side-menu">
-            <%if(!locals.loggedin){%>
+            <%if(locals.loggedin && loggedin){}else{%>
                 <div class="button" onclick="togglemodal('login-modal')">
                     <span>Sign up</span>
                 </div>
@@ -29,7 +29,7 @@
     </div>
 </body>
 
-<%if(!locals.loggedin){%>
+<%if(locals.loggedin && loggedin){}else{%>
     <div id="login-modal" class="modal"">
 
         <div class="modal-content">
@@ -42,6 +42,8 @@
                 <input name="password" type="password" placeholder="Password"><br>
                 <button type="submit" id="modalformsubmit">Sign Up</button>
             </form>
+
+            <span id="error-message"></span>
 
             <div id="prompt-login">
 
@@ -58,10 +60,20 @@
 <script src="/include/js/function-home.js"></script>
 <script>
 
-<% if(locals.registered){%>
+'<% if(locals.registered){%>'
     togglemodal('login-modal')
     switchmodalcontent()
-<%}%>
+'<%}%>'
+
+'<% if(locals.error){%>'
+    togglemodal('login-modal')
+    document.getElementById('error-message').textContent = "<%=error%>"
+
+    '<% if(locals.failedlogin){%>'
+        switchmodalcontent()
+    '<%}%>'
+
+'<%}%>'
 
 const modal = document.getElementById('login-modal')
 

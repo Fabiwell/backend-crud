@@ -21,6 +21,9 @@ const exists = async (email) => {
 }
 
 const validate = async (email, password) => {
+
+  if(email == "" || password == "") throw new Error('One or more fields are empty.')
+
   let user = await prisma.user.findFirst({
     where:{
       email: email
@@ -47,22 +50,33 @@ const findById = async (id) => {
   })
   return user
 }
+const register = async (email, name, password) => {
 
- const register = async (email, name, password) => {
-  let hashed = await hashPassword(password)
-  let user = await prisma.user.create({
-    data:{
-      email,
-      name,
-      password: hashed
-    },
-    select:{
-      id: true,
-      email: true,
-      name: true
+    const existingUser = await exists(email);
+
+    if (existingUser) {
+        throw new Error('User with this email already exists.');
     }
-  })
-  return user
+
+    if (email === "" || name === "" || password === ""){
+        throw new Error('One or more fields are empty.');
+    }
+
+
+    let hashed = await hashPassword(password)
+    let user = await prisma.user.create({
+        data:{
+            email,
+            name,
+            password: hashed
+        },
+        select:{
+            id: true,
+            email: true,
+            name: true
+        }
+    })
+    return user
 }
 
 module.exports = {

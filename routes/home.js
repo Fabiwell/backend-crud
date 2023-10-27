@@ -1,11 +1,23 @@
 const express = require('express')
-const { register } = require('../classes/register')
+const { register, validate } = require('../classes/register')
 const router = express.Router()
 const https = require('https')
+const request = require('request');
+
+
+const options = {
+  'method': 'GET',
+  'url': 'https://api.coincap.io/v2/assets/',
+  'headers': {
+  }
+};
 
 
 router.route('/')
 .get((req, res) => {
+    const coindata = fetchcoindata();
+    console.log(coindata);
+
     res.render('index')
 })
 
@@ -25,6 +37,7 @@ router.route('/register')
     } catch (error) {
         console.log(error);
         res.render("index", {
+            error,
             email,
             name,
         })
@@ -32,8 +45,50 @@ router.route('/register')
 })
 
 router.route('/login')
-.post((req, res) => {
+.post(async (req, res) => {
+    const data = req.body
+    const email = data.email
+    const password = data.password
 
+    try{
+        if(await validate(email, password)){
+            req.session.loggedin = true
+            req.session.email = email
+        }else{
+            throw new Error('Invalid credentials.')
+        }
+    } catch (error) {
+        console.log(error);
+        res.render('index', {
+            error,
+            failedlogin: true,
+            loggedin: req.session.loggedin
+        })
+    }
 })
+
+function checkLoggedIn(req, res, next) {
+    // Check if the email session is set and not null
+    if (!req.session.email || !req.session.loggedIn) {
+      // Redirect the user to a specific route if they are not logged in
+      res.redirect('/account/login');
+    }
+    else {
+      // If the user is logged in,Move to the next middleware/route handler
+      next();
+    }
+  }
+
+  function fetchcoindata(req, res, next) {
+    const url = `https://api.coincap.io/v2/assets`;
+
+    request(url, (error, response, body) => {
+        console.log(response);
+      if (!error && response.statusCode == 200) {
+        const data = JSON.parse(response.body);
+        return data;
+      }
+    });
+  }
 
 module.exports = router
