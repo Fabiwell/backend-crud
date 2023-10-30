@@ -18,7 +18,7 @@ router.route('/')
     const coindata = fetchcoindata();
     console.log(coindata);
 
-    res.render('index')
+    res.render('index', {coindata})
 })
 
 router.route('/register')
@@ -79,16 +79,24 @@ function checkLoggedIn(req, res, next) {
     }
   }
 
-  function fetchcoindata(req, res, next) {
+  function fetchcoindata() {
     const url = `https://api.coincap.io/v2/assets`;
 
-    request(url, (error, response, body) => {
-        console.log(response);
-      if (!error && response.statusCode == 200) {
-        const data = JSON.parse(response.body);
-        return data;
-      }
-    });
-  }
+    return request(url)
+        .then(body => JSON.parse(body))
+        .catch(error => {
+            throw error;
+        });
+    }
+
+// Usage of fetchcoindata with async/await
+(async () => {
+    try {
+        const coindata = await fetchcoindata();
+        console.log(coindata);
+    } catch (error) {
+        console.error("Error fetching coin data:", error);
+    }
+})();
 
 module.exports = router

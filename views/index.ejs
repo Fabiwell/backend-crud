@@ -25,7 +25,29 @@
                 </div>
             <%}%>
         </div>
-        <div id="content"></div>
+        <div id="content">
+            <table class="pure-table">
+                <thead>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Price</th>
+                    <th>Supply</th>
+                    <th>Change</th>
+                </thead>
+                <tbody>
+                    <%if(locals.coindata){coindata.forEach(coin => {%>
+                        
+                        <tr id="<%=coin.name%>">
+                            <td><%=coin.id%></td>
+                            <td><%=coin.symbol%></td>
+                            <td><%=coin.priceUsd%></td>
+                            <td><%=coin.supply%></td>
+                            <td><%=coin.changePercent24Hr%></td>
+                        </tr>
+                    <%})}%>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 
