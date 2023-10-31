@@ -1,3 +1,28 @@
+window.onload = function() {
+    
+    const canvas = document.getElementById('bitcoinPriceChart');
+    const crypto = "bitcoin"
+
+    fetch(`/crypto-history?crypto=${crypto}`)
+        .then(response => response.json())
+        .then(data => {
+            const ctx = canvas.getContext('2d');
+            var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.data.map(point => new Date(point.time).toLocaleDateString()),
+                datasets: [{
+                label: crypto,
+                data: data.data.map(point => point.priceUsd),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+                }]
+            }
+            });
+        });
+  };
+
+
 
 //define variables
 
@@ -88,4 +113,18 @@ function switchmodalcontent(){
         noAccount = true
 
     }
+}
+
+//function for updating the chart
+function updateChart(crypto) {
+    const chart = Chart.getChart('bitcoinPriceChart');
+    fetch(`/crypto-history?crypto=${crypto}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            chart.data.datasets[0].label = crypto;
+            chart.data.labels = data.data.map(point => new Date(point.time).toLocaleDateString());
+            chart.data.datasets[0].data = data.data.map(point => point.priceUsd);
+            chart.update();
+        });
 }

@@ -35,7 +35,7 @@
                     <th>Change</th>
                 </thead>
                 <tbody>
-                    <%if(locals.coindata){coindata.forEach(coin => {%>
+                    <%if(locals.coindata){coindata.data.forEach(coin => {%>
                         
                         <tr id="<%=coin.name%>">
                             <td><%=coin.id%></td>
@@ -43,6 +43,7 @@
                             <td><%=coin.priceUsd%></td>
                             <td><%=coin.supply%></td>
                             <td><%=coin.changePercent24Hr%></td>
+                            <td><button class="button" onclick="togglemodal('bitcoin-modal')">Show detail</button></td>
                         </tr>
                     <%})}%>
                 </tbody>
@@ -50,6 +51,16 @@
         </div>
     </div>
 </body>
+
+    <div id="bitcoin-modal" class="modal">
+
+        <div class="modal-content">
+
+            <canvas id="bitcoinPriceChart"></canvas>
+        </div>
+    </div>
+
+
 
 <%if(locals.loggedin && loggedin){}else{%>
     <div id="login-modal" class="modal"">
@@ -87,7 +98,7 @@
     switchmodalcontent()
 '<%}%>'
 
-'<% if(locals.error){%>'
+'<% if(locals.error || error == ""){%>'
     togglemodal('login-modal')
     document.getElementById('error-message').textContent = "<%=error%>"
 
@@ -97,12 +108,25 @@
 
 '<%}%>'
 
-const modal = document.getElementById('login-modal')
+const loginmodal = document.getElementById('login-modal')
+const bitcoinmodal = document.getElementById('login-modal')
+
 
 window.onclick = function(event) {
-  if (event.target == modal) {
+  if (event.target == loginmodal) {
     togglemodal('login-modal')
   }
+  if (event.target == bitcoinmodal) {
+    togglemodal('bitcoin-modal')
+  }
 }
+
+const rows = document.querySelectorAll("tr")
+    rows.forEach(row => {
+        row.addEventListener("onclick", (ev) => {
+            togglemodal('bitcoin-modal')
+            updateChart(row.id.toLowerCase())
+        });
+    });
 
 </script>

@@ -59,12 +59,17 @@
 }
 #body-home #content {
   background-color: #573232;
+  color: whitesmoke;
+  overflow: auto;
   width: 80%;
   right: 0;
   height: 100%;
   z-index: 2; /* Set z-index for the content higher than the circles */
   border-radius: 50px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15) inset;
+}
+#body-home #content::-webkit-scrollbar {
+  display: none;
 }
 #body-home #prompt-login {
   width: 50%;

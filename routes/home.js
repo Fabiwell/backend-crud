@@ -3,6 +3,7 @@ const { register, validate } = require('../classes/register')
 const router = express.Router()
 const https = require('https')
 const request = require('request');
+const url = require('url');
 
 
 const options = {
@@ -14,11 +15,25 @@ const options = {
 
 
 router.route('/')
-.get((req, res) => {
-    const coindata = fetchcoindata();
-    console.log(coindata);
+.get(async (req, res) => {
 
-    res.render('index', {coindata})
+    const url = `https://api.coincap.io/v2/assets/`;
+
+    await request(url, function (error, response){
+        if (error) throw new Error(error);
+
+        console.log(req.query);
+
+        res.render('index', {
+            coindata: JSON.parse(response.body),
+            loggedin: req.session.loggedin,
+            error: req.query.error,
+            email: req.query.email,
+            name: req.query.name,
+            registered: req.query.registered,
+            failedlogin: req.query.failedlogin
+        })
+    })
 })
 
 router.route('/register')
@@ -30,17 +45,23 @@ router.route('/register')
 
     try {
         await register(email, name, password)
-        res.render("index", {
-            registered: true
-        })
+        res.redirect(url.format({
+            pathname:"/",
+            query: {
+                registered: true
+            }
+        }))
 
     } catch (error) {
         console.log(error);
-        res.render("index", {
-            error,
-            email,
-            name,
-        })
+        res.redirect(url.format({
+            pathname:"/",
+            query: {
+                error,
+                email,
+                name,
+            }
+        }))
     }
 })
 
@@ -52,51 +73,37 @@ router.route('/login')
 
     try{
         if(await validate(email, password)){
+            console.log('checking validation');
             req.session.loggedin = true
             req.session.email = email
         }else{
             throw new Error('Invalid credentials.')
         }
+        console.log('done checking validation');
+        res.redirect('/')
+
     } catch (error) {
         console.log(error);
-        res.render('index', {
-            error,
-            failedlogin: true,
-            loggedin: req.session.loggedin
-        })
+        res.redirect(url.format({
+            pathname:"/",
+            query: {
+                error,
+                failedlogin: true,
+             }
+          }))
     }
 })
 
 function checkLoggedIn(req, res, next) {
-    // Check if the email session is set and not null
+// Check if the email session is set and not null
     if (!req.session.email || !req.session.loggedIn) {
-      // Redirect the user to a specific route if they are not logged in
-      res.redirect('/account/login');
+        // Redirect the user to a specific route if they are not logged in
+        res.redirect('/account/login');
     }
     else {
-      // If the user is logged in,Move to the next middleware/route handler
-      next();
+        // If the user is logged in,Move to the next middleware/route handler
+        next();
     }
-  }
-
-  function fetchcoindata() {
-    const url = `https://api.coincap.io/v2/assets`;
-
-    return request(url)
-        .then(body => JSON.parse(body))
-        .catch(error => {
-            throw error;
-        });
-    }
-
-// Usage of fetchcoindata with async/await
-(async () => {
-    try {
-        const coindata = await fetchcoindata();
-        console.log(coindata);
-    } catch (error) {
-        console.error("Error fetching coin data:", error);
-    }
-})();
+}
 
 module.exports = router
