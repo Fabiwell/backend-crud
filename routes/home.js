@@ -1,9 +1,10 @@
 const express = require('express')
 const { register, validate } = require('../classes/register')
 const router = express.Router()
-const https = require('https')
 const request = require('request');
 const url = require('url');
+const fs = require('fs');
+const path = require('path');
 
 
 const options = {
@@ -17,14 +18,27 @@ const options = {
 router.route('/')
 .get(async (req, res) => {
 
-    const url = `https://api.coincap.io/v2/assets/`;
+    const filePath = path.join(__dirname, '../resources', 'secret.json');
+    const file = fs.readFileSync(filePath, 'utf8')
+    const filedata = JSON.parse(file)
+    const apikeyExchange = filedata.apikeyExchange
+    const urlCoin = `https://api.coincap.io/v2/assets/`;
+    const urlExchange = `https://v6.exchangerate-api.com/v6/${apikeyExchange}/latest/USD`
 
-    await request(url, function (error, response){
+    let exchangeEUR;
+
+    await request(urlExchange, function (error, response){
+        if (error) throw new Error(error);
+
+        const rawdata = JSON.parse(response.body)
+        exchangeEUR = rawdata.conversion_rates.EUR
+    });
+    await request(urlCoin, function (error, response){
         if (error) throw new Error(error);
 
         const data = JSON.parse(response.body)
-        data.data.forEach(row => {
-            console.log(row);
+        data.data.forEach(coin => {
+            coin.priceEuro = parseFloat(coin.priceUsd) * exchangeEUR
         });
 
         res.render('index', {
@@ -96,6 +110,18 @@ router.route('/login')
           }))
     }
 })
+
+router.route('/news')
+.get(async (req, res) => {
+
+    let error;
+
+    res.render('index', {
+        news: true,
+        error
+    })
+})
+
 
 function checkLoggedIn(req, res, next) {
 // Check if the email session is set and not null

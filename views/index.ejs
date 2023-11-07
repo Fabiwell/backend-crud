@@ -1,56 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/include/css/stylesheet.css">
-    <title>Home</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/include/css/stylesheet.css">
+        <title>Home</title>
+    </head>
 
 
-<body id="body-home">
-    <div id="nav-bar">
-        <img src="/resources/menu.svg" alt="menu-button" id="menu-button" onclick="movemenu()">
-        <div class="circle" id="circle1"></div>
-        <div class="circle" id="circle2"></div>
-        <div class="circle" id="circle3"></div>
-        <div class="circle" id="circle4"></div>
-        <div class="circle" id="circle5"></div>
-    </div>
-    <div id="container">
-        <div id="side-menu">
-            <%if(locals.loggedin && loggedin){}else{%>
-                <div class="button" onclick="togglemodal('login-modal')">
-                    <span>Sign up</span>
+    <body id="body-home">
+        <%- include('../views/home/navbar.ejs')%>
+        <div id="container">
+            <div id="side-menu">
+                <%-include('../views/home/loginbutton.ejs')%>
+                <div class="button" onclick="location.href = '/news'">
+                    <span>News</span>
                 </div>
-            <%}%>
+            </div>
+            <div id="content">
+                <% if(!locals.news){ %><%- include('../views/home/tablecrypto.ejs')%><%}%>
+            </div>
         </div>
-        <div id="content">
-            <table class="pure-table">
-                <thead>
-                    <th>Name</th>
-                    <th>Symbol</th>
-                    <th>Price</th>
-                    <th>Supply</th>
-                    <th>Change</th>
-                </thead>
-                <tbody>
-                    <%if(locals.coindata){coindata.data.forEach(coin => {%>
-                        
-                        <tr id="<%=coin.name%>">
-                            <td><%=coin.id%></td>
-                            <td><%=coin.symbol%></td>
-                            <td>$<%=coin.priceUsd%></td>
-                            <td><%=coin.supply%></td>
-                            <td><%=coin.changePercent24Hr%></td>
-                            <td><button class="button" onclick="togglemodal('bitcoin-modal')">Details</button></td>
-                        </tr>
-                    <%})}%>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
+    </body>
 
     <div id="bitcoin-modal" class="modal">
 
@@ -62,71 +33,7 @@
 
 
 
-<%if(locals.loggedin && loggedin){}else{%>
-    <div id="login-modal" class="modal"">
-
-        <div class="modal-content">
-
-            <h1 id="modal-title">Register</h1>
-
-            <form action="/register" method="post" name="modalForm" id="modal-form">
-                <input name="name" type="text" placeholder="Full Name" id="fullname"><br>
-                <input name="email" type="email" placeholder="Email"><br>
-                <input name="password" type="password" placeholder="Password"><br>
-                <button type="submit" id="modalformsubmit">Sign Up</button>
-            </form>
-
-            <span id="error-message"></span>
-
-            <div id="prompt-login">
-
-                <h4 id="account-check">already have an account?</h4>
-                <h5 id="switch-login" onclick="switchmodalcontent()">Sign In</h5>
-
-            </div>
-        </div>
-    </div>
-<%}%>
+    <%- include('../views/home/loginmodal.ejs')%>
 </html>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="/include/js/function-home.js"></script>
-<script>
-
-'<% if(locals.registered){%>'
-    togglemodal('login-modal')
-    switchmodalcontent()
-'<%}%>'
-
-'<% if(locals.error || error == ""){%>'
-    togglemodal('login-modal')
-    document.getElementById('error-message').textContent = "<%=error%>"
-
-    '<% if(locals.failedlogin){%>'
-        switchmodalcontent()
-    '<%}%>'
-
-'<%}%>'
-
-const loginmodal = document.getElementById('login-modal')
-const bitcoinmodal = document.getElementById('login-modal')
-
-
-window.onclick = function(event) {
-  if (event.target == loginmodal) {
-    togglemodal('login-modal')
-  }
-  if (event.target == bitcoinmodal) {
-    togglemodal('bitcoin-modal')
-  }
-}
-
-const rows = document.querySelectorAll("tr")
-    rows.forEach(row => {
-        row.addEventListener("onclick", (ev) => {
-            togglemodal('bitcoin-modal')
-            updateChart(row.id.toLowerCase())
-        });
-    });
-
-</script>
+<%- include('../views/home/homescripts.ejs')%>

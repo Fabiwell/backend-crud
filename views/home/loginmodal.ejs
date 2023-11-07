@@ -1,0 +1,25 @@
+<%if(locals.loggedin && loggedin){}else{%>
+    <div id="login-modal" class="modal"">
+
+        <div class="modal-content">
+
+            <h1 id="modal-title">Register</h1>
+
+            <form action="/register" method="post" name="modalForm" id="modal-form">
+                <input name="name" type="text" placeholder="Full Name" id="fullname"><br>
+                <input name="email" type="email" placeholder="Email"><br>
+                <input name="password" type="password" placeholder="Password"><br>
+                <button type="submit" id="modalformsubmit">Sign Up</button>
+            </form>
+
+            <span id="error-message"></span>
+
+            <div id="prompt-login">
+
+                <h4 id="account-check">already have an account?</h4>
+                <h5 id="switch-login" onclick="switchmodalcontent()">Sign In</h5>
+
+            </div>
+        </div>
+    </div>
+<%}%>
