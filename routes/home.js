@@ -22,10 +22,13 @@ router.route('/')
     await request(url, function (error, response){
         if (error) throw new Error(error);
 
-        console.log(req.query);
+        const data = JSON.parse(response.body)
+        data.data.forEach(row => {
+            console.log(row);
+        });
 
         res.render('index', {
-            coindata: JSON.parse(response.body),
+            coindata: data,
             loggedin: req.session.loggedin,
             error: req.query.error,
             email: req.query.email,

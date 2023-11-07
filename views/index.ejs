@@ -40,10 +40,10 @@
                         <tr id="<%=coin.name%>">
                             <td><%=coin.id%></td>
                             <td><%=coin.symbol%></td>
-                            <td><%=coin.priceUsd%></td>
+                            <td>$<%=coin.priceUsd%></td>
                             <td><%=coin.supply%></td>
                             <td><%=coin.changePercent24Hr%></td>
-                            <td><button class="button" onclick="togglemodal('bitcoin-modal')">Show detail</button></td>
+                            <td><button class="button" onclick="togglemodal('bitcoin-modal')">Details</button></td>
                         </tr>
                     <%})}%>
                 </tbody>
