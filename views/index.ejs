@@ -16,8 +16,29 @@
                 <div class="button" onclick="location.href = '/news'">
                     <span>News</span>
                 </div>
+                <div class="button" onclick="location.href = '/'">
+                    <span>Home</span>
+                </div>
             </div>
             <div id="content">
+                <%if(locals.news){
+                    newsData.articles.forEach(row => {
+                        %>
+                        <div class="news-article">
+                            <div class="news-container">
+                                <h1><%=row.title%></h1>
+                                <p>Author: <%=row.author%></p>
+                                <p><%=row.description%></p>
+                                <a href="<%=row.url%>">Read More</a>
+                            </div>
+                            <div class="image-container">
+                                <img src="<%=row.urlToImage%>" alt="image">
+                            </div>
+                        </div>
+                    <%})
+                }%>
+
+
                 <% if(!locals.news){ %><%- include('../views/home/tablecrypto.ejs')%><%}%>
             </div>
         </div>

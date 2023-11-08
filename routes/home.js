@@ -1,55 +1,52 @@
 const express = require('express')
 const { register, validate } = require('../classes/register')
 const router = express.Router()
-const request = require('request');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
 
-const options = {
-  'method': 'GET',
-  'url': 'https://api.coincap.io/v2/assets/',
-  'headers': {
-  }
-};
+const filePath = path.join(__dirname, '../resources', 'secret.json');
+const file = fs.readFileSync(filePath, 'utf8')
+const keys = JSON.parse(file)
 
 
 router.route('/')
 .get(async (req, res) => {
 
-    const filePath = path.join(__dirname, '../resources', 'secret.json');
-    const file = fs.readFileSync(filePath, 'utf8')
-    const filedata = JSON.parse(file)
-    const apikeyExchange = filedata.apikeyExchange
+    const apikeyExchange = keys.apikeyExchange
     const urlCoin = `https://api.coincap.io/v2/assets/`;
     const urlExchange = `https://v6.exchangerate-api.com/v6/${apikeyExchange}/latest/USD`
+    
+    const getExchange = async (to) => {
+        const response = await fetch(urlExchange)
+        const json = await response.json()
+        
+        return json.conversion_rates[to]
+    }
 
-    let exchangeEUR;
+    const getCoinData = async () => {
+        const response = await fetch(urlCoin)
+        const json = await response.json()
+        
+        return json.data
+    }
+    
+    const exchangeEUR = await getExchange('EUR')
+    const coinData = await getCoinData()
 
-    await request(urlExchange, function (error, response){
-        if (error) throw new Error(error);
+    coinData.forEach(coin => {
+        coin.priceEuro = parseFloat(coin.priceUsd) * exchangeEUR
+    })
 
-        const rawdata = JSON.parse(response.body)
-        exchangeEUR = rawdata.conversion_rates.EUR
-    });
-    await request(urlCoin, function (error, response){
-        if (error) throw new Error(error);
-
-        const data = JSON.parse(response.body)
-        data.data.forEach(coin => {
-            coin.priceEuro = parseFloat(coin.priceUsd) * exchangeEUR
-        });
-
-        res.render('index', {
-            coindata: data,
-            loggedin: req.session.loggedin,
-            error: req.query.error,
-            email: req.query.email,
-            name: req.query.name,
-            registered: req.query.registered,
-            failedlogin: req.query.failedlogin
-        })
+    res.render('index', {
+        coindata: coinData,
+        loggedin: req.session.loggedin,
+        error: req.query.error,
+        email: req.query.email,
+        name: req.query.name,
+        registered: req.query.registered,
+        failedlogin: req.query.failedlogin
     })
 })
 
@@ -114,25 +111,27 @@ router.route('/login')
 router.route('/news')
 .get(async (req, res) => {
 
-    let error;
-
-    res.render('index', {
-        news: true,
-        error
-    })
-})
+    let error
+    const urlNews = `https://newsapi.org/v2/everything?q=crypto&apiKey=${keys.apikeyNews}`
 
 
-function checkLoggedIn(req, res, next) {
-// Check if the email session is set and not null
-    if (!req.session.email || !req.session.loggedIn) {
-        // Redirect the user to a specific route if they are not logged in
-        res.redirect('/account/login');
-    }
-    else {
-        // If the user is logged in,Move to the next middleware/route handler
-        next();
-    }
-}
+    try {
+        const response = await fetch(urlNews)
+        const json = await response.json()
+  
+        res.render('index', {
+          newsData: json,
+          news: true,
+          error
+        })
+      } catch (err) {
+        console.error('Error fetching news data:', err);
+        res.render('index', {
+          newsData: null, // Handle the case where the data could not be fetched
+          news: true,
+          error: err
+        });
+      }
+});
 
 module.exports = router

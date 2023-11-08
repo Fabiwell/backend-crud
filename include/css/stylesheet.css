@@ -67,6 +67,41 @@
   z-index: 2; /* Set z-index for the content higher than the circles */
   border-radius: 50px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15) inset;
+  text-align: center;
+}
+#body-home #content .pure-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px; /* Set a max width if needed */
+  margin: 0 auto; /* Center the table */
+  background-color: #573232;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+#body-home #content .pure-table th, #body-home #content .pure-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+#body-home #content .pure-table th {
+  color: white;
+}
+#body-home #content .pure-table a {
+  text-decoration: none;
+  color: #0074d9;
+}
+#body-home #content .pure-table button {
+  background-color: #502C2C;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+#body-home #content .pure-table button:hover {
+  background-color: darkgray;
 }
 #body-home #content::-webkit-scrollbar {
   display: none;
@@ -78,6 +113,43 @@
 #body-home #prompt-login #switch-login:hover {
   cursor: pointer;
   color: blue;
+}
+#body-home .news-article {
+  display: flex;
+  background-color: #573232;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#body-home .news-article .news-container {
+  flex: 1;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+}
+#body-home .news-article .news-container h1 {
+  font-size: 24px;
+  margin: 0;
+}
+#body-home .news-article .news-container p {
+  font-size: 16px;
+}
+#body-home .news-article .news-container a {
+  text-decoration: none;
+  color: #0074d9;
+}
+#body-home .news-article .image-container {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50px;
+}
+#body-home .news-article .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .circle {

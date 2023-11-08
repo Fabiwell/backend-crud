@@ -1,22 +1,19 @@
 <table class="pure-table">
     <thead>
+        <th>rank</th>
         <th>Name</th>
-        <th>Symbol</th>
         <th>Price in USD</th>
         <th>Price in EURO</th>
-        <th>Supply</th>
-        <th>Change</th>
+        <th>Link</th>
     </thead>
     <tbody>
-        <%if(locals.coindata){coindata.data.forEach(coin => {%>
-            
+        <%if(locals.coindata){coindata.forEach(coin => {%>            
             <tr id="<%=coin.name%>">
-                <td><%=coin.id%></td>
-                <td><%=coin.symbol%></td>
+                <td><%=coin.rank%></td>
+                <td><%=coin.name%></td>
                 <td>$<%=coin.priceUsd%></td>
                 <td>€<%=coin.priceEuro%></td>
-                <td><%=coin.supply%></td>
-                <td><%=coin.changePercent24Hr%></td>
+                <td><a href="<%=coin.explorer%>">Link</a></td>
                 <td><button class="button" onclick="togglemodal('bitcoin-modal')">Details</button></td>
             </tr>
         <%})}%>
