@@ -134,4 +134,15 @@ router.route('/news')
       }
 });
 
+router.route('/crypto-history')
+.get((req, res) => {
+    const url = `https://api.coincap.io/v2/assets/${req.query.crypto}/history?interval=d1`;
+  
+    request(url, (error, response, body) => {
+      if (!error && response.statusCode == 200) {
+        const data = JSON.parse(body);
+        res.send(data);
+      }
+    });
+  });
 module.exports = router

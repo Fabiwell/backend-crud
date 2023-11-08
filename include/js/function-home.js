@@ -1,26 +1,48 @@
-window.onload = function() {
+
     
+
+function renderChartInsideModal() {
     const canvas = document.getElementById('bitcoinPriceChart');
     const crypto = "bitcoin"
 
-    fetch(`/crypto-history?crypto=${crypto}`)
-        .then(response => response.json())
-        .then(data => {
-            const ctx = canvas.getContext('2d');
-            var chart = new Chart(ctx, {
+    fetch(`https://api.coincap.io/v2/assets/${crypto}/history?interval=h6`)
+    .then(response => response.json())
+    .then(data => {
+
+        const slicedData = data.data.slice(0, 28);
+
+        // Extract data from the JSON response
+        const chartData = {
+            labels: [], // Array for date labels
+            priceData: [] // Array for price data
+        };
+
+        data.data.forEach(point => {
+            // Convert the timestamp to a date string
+            const date = new Date(point.time).toLocaleDateString();
+
+            // Push date and price to the corresponding arrays
+            chartData.labels.push(formatDate(point.time));
+            chartData.priceData.push(point.priceUsd);
+        });
+
+        console.log(chartData);
+
+        const ctx = canvas.getContext('2d');
+        var chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data.data.map(point => new Date(point.time).toLocaleDateString()),
+                labels: slicedData.map(point => new Date(point.time).toLocaleDateString()),
                 datasets: [{
-                label: crypto,
-                data: data.data.map(point => point.priceUsd),
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                    label: crypto,
+                    data: slicedData.map(point => point.priceUsd),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
                 }]
             }
-            });
         });
-  };
+    });
+}
 
 
 
@@ -47,6 +69,15 @@ function movemenu() {
         togglemenu.reverse();
     }
 
+}
+
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:00`;
 }
 
 function animateCircles(){
@@ -79,6 +110,7 @@ function togglemodal(modal){
 
         toggleModalcontent.play()
         thisModal.style.display = "block";
+        renderChartInsideModal();
 
     }
 }

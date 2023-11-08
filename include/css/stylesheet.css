@@ -201,9 +201,7 @@
   padding: 20px;
   border: 1px #432727;
   color: whitesmoke;
-  width: 0; /* Could be more or less, depending on screen size */
 }
-
 form {
   align-content: center;
 }

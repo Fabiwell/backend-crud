@@ -57,7 +57,11 @@ $sidecolor: #502C2C;
   padding: 20px;
   border: 1px $navcolor;
   color: whitesmoke;
-  width: 0; /* Could be more or less, depending on screen size */
+
+  canvas{
+
+  }
+
 }
 
 
