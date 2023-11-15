@@ -1,16 +1,23 @@
-
+let chart;
     
 
-function renderChartInsideModal() {
+function renderChartInsideModal(crypto) {
+
+    crypto = crypto.toLowerCase();
+
     const canvas = document.getElementById('bitcoinPriceChart');
-    const crypto = "bitcoin"
+
+    let existingChart = Chart.getChart(canvas);
+    if (existingChart) {
+        existingChart.destroy();
+    }
 
     fetch(`https://api.coincap.io/v2/assets/${crypto}/history?interval=h6`)
     .then(response => response.json())
     .then(data => {
 
         const slicedData = data.data.slice(0, 28);
-
+        
         // Extract data from the JSON response
         const chartData = {
             labels: [], // Array for date labels
@@ -26,7 +33,6 @@ function renderChartInsideModal() {
             chartData.priceData.push(point.priceUsd);
         });
 
-        console.log(chartData);
 
         const ctx = canvas.getContext('2d');
         var chart = new Chart(ctx, {
@@ -80,21 +86,7 @@ function formatDate(timestamp) {
     return `${year}-${month}-${day} ${hours}:00`;
 }
 
-function animateCircles(){
-
-    gsap.to(".circle", {
-        x: window.innerWidth,
-        duration: 4
-    })
-
-    gsap.set(".circle", {
-        x: 0
-    })
-
-    console.log(window.innerWidth);
-}
-
-function togglemodal(modal){
+function togglemodal(modal, crypto = "bitcoin", price = "0", volume = "0", supply = "0"){
 
     const thisModal = document.getElementById(modal)
 
@@ -110,7 +102,18 @@ function togglemodal(modal){
 
         toggleModalcontent.play()
         thisModal.style.display = "block";
-        renderChartInsideModal();
+
+        const modalTitle = document.getElementById('bitcoin-modal-title')
+        const modalPrice = document.getElementById('bitcoin-modal-price')
+        const modalVolume = document.getElementById('bitcoin-modal-volume')
+        const modalSupply = document.getElementById('bitcoin-modal-supply')
+
+        modalTitle.innerHTML = crypto;
+        modalPrice.innerHTML = "Price Usd: " + price;
+        modalVolume.innerHTML = "Volume: " + volume;
+        modalSupply.innerHTML = "Supply: " + supply;
+
+        renderChartInsideModal(crypto);
 
     }
 }
@@ -145,18 +148,4 @@ function switchmodalcontent(){
         noAccount = true
 
     }
-}
-
-//function for updating the chart
-function updateChart(crypto) {
-    const chart = Chart.getChart('bitcoinPriceChart');
-    fetch(`/crypto-history?crypto=${crypto}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            chart.data.datasets[0].label = crypto;
-            chart.data.labels = data.data.map(point => new Date(point.time).toLocaleDateString());
-            chart.data.datasets[0].data = data.data.map(point => point.priceUsd);
-            chart.update();
-        });
 }

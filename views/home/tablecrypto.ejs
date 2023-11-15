@@ -14,7 +14,7 @@
                 <td>$<%=coin.priceUsd%></td>
                 <td>€<%=coin.priceEuro%></td>
                 <td><a href="<%=coin.explorer%>">Link</a></td>
-                <td><button class="button" onclick="togglemodal('bitcoin-modal')">Details</button></td>
+                <td><button class="button" onclick="togglemodal('bitcoin-modal', '<%=coin.name%>', '<%=coin.priceUsd%>', '<%=coin.volumeUsd24Hr%>', '<%=coin.supply%>')">Details</button></td>
             </tr>
         <%})}%>
     </tbody>

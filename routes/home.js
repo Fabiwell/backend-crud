@@ -82,14 +82,14 @@ router.route('/register')
 router.route('/login')
 .post(async (req, res) => {
     const data = req.body
-    const email = data.email
+    const id = data.id
     const password = data.password
 
     try{
-        if(await validate(email, password)){
+        if(await validate(id, password)){
             console.log('checking validation');
             req.session.loggedin = true
-            req.session.email = email
+            req.session.userId = id
         }else{
             throw new Error('Invalid credentials.')
         }

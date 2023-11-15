@@ -19,6 +19,11 @@
                 <div class="button" onclick="location.href = '/'">
                     <span>Home</span>
                 </div>
+                <%if(locals.loggedin && loggedin){%>
+                    <div class="button" onclick="togglemodal('wallet-modal')">
+                        <span>Wallet</span>
+                    </div>
+                <%}%>
             </div>
             <div id="content">
                 <%if(locals.news){
@@ -48,10 +53,29 @@
 
         <div class="modal-content">
 
+            <h1 id="bitcoin-modal-title"></h1>
+            <span id="bitcoin-modal-price"></span>
+            <span id="bitcoin-modal-volume"></span>
+            <span id="bitcoin-modal-supply"></span>
+
             <canvas id="bitcoinPriceChart"></canvas>
+
+            <span>Amount to add:</span><br>
+            <textarea id="add-coin-amount"></textarea>
+
+            <div class="button" onclick="togglemodal('add-to-wallet-modal')">
+                <span>Add To Wallet</span>
+            </div>
         </div>
     </div>
 
+    <div id="wallet-modal" class="modal">
+
+        <div class="modal-content">
+
+            <h1>Wallet</h1>
+        </div>
+    </div>
 
 
     <%- include('../views/home/loginmodal.ejs')%>

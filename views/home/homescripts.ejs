@@ -31,12 +31,4 @@ window.onclick = function(event) {
   }
 }
 
-const rows = document.querySelectorAll("tr")
-    rows.forEach(row => {
-        row.addEventListener("onclick", (ev) => {
-            togglemodal('bitcoin-modal')
-            updateChart(row.id.toLowerCase())
-        });
-    });
-
 </script>
