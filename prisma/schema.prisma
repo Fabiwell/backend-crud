@@ -11,15 +11,21 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  email String @db.VarChar(255) @unique
-  password String @db.VarChar(255)
-  wallet Wallet?
+  id        Int     @id @default(autoincrement())
+  name      String  @db.VarChar(255)
+  email     String  @db.VarChar(255) @unique
+  password      String  @db.VarChar(255)
+  walletToUser      Wallet[] @relation("WalletToUser")
+  
 }
 
 model Wallet {
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
-  userId Int @unique
+  id    Int @id @default(autoincrement())
+  user User @relation("WalletToUser", fields: [userId], references: [id])
+  userId Int
+  coin   String @db.VarChar(255)
+  priceUsd String @db.VarChar(255)
+  priceEuro String @db.VarChar(255)
+  amount String @db.VarChar(255)
+  icon String @db.VarChar(255)
 }
